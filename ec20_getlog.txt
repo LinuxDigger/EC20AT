@@ -1,0 +1,12 @@
+
+
+//ec20 美幻现在linux上用的是GobiQMI模式
+
+
+获取日志步骤就是
+1.AT+QCFG="DBGCTL",0  --搞不懂干嘛的。
+2.运行QLOG
+	./QLog  -f  T5.COMMON-集成了T1到T4_V01.cfg -s . -m 500
+3.at+cfun=0,at+cfun=1
+4.at+cgreg?查询返回0，1后CM拨号；
+5.拨号失败后等半分钟，输出日志
