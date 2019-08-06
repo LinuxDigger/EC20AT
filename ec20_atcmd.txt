@@ -1,0 +1,64 @@
+
+ec20常用at指令
+-------------------------------------高频命令-------------------------------------
+查信号：
+echo -e "at+csq\r\n" > /dev/ttyUSB2 
+	--- 貌似没卡也能查
+	+CSQ: 28,99
+	
+echo -e "AT+QNWINFO\r\n"  > /dev/ttyUSB2 
+	--- 貌似没卡也能查
+	+QNWINFO: "FDD LTE","46011","LTE BAND 5",1825
+	
+echo -e "at+qcsq?\r\n" > /dev/ttyUSB2 
+	--- 貌似没卡就是ERROR， 没能上网就是0
+	+QCSQ: 0
+	
+飞行模式开关：
+0开启飞行模式（最小功能模式）  1全功能模式（默认）
+echo -e  "AT+CFUN=0\r\n" > /dev/ttyUSB2
+echo -e  "AT+CFUN=1\r\n" > /dev/ttyUSB2
+
+检测手机卡：
+echo -e "at+cpin?\r\n" > /dev/ttyUSB2
+
+查询手机模块是否处于cs和ps都打开的状态--结果为2则都打开
+echo -e "at+qcfg=\"servicedomain\"\r\n" >  /dev/ttyUSB2
+
+设置手机模块处于哪种调制模式： 0自动。
+echo -e  "AT+QCFG=\"nwscanmode\",0\r\n"   >  /dev/ttyUSB2
+
+查询手机模块处于哪种调制模式：结果为0自动。
+echo -e "at+qcfg=\"nwscanmode\"\r\n" >  /dev/ttyUSB2
+
+查看网络注册状态：
+echo -e "at+cgreg?\r\n" > /dev/ttyUSB2
+In Non-CDMA mode:
++CGREG: x,0  -- Not registered. MT is not currently searching an operator to register to. 
++CGREG: x,1  -- Registered
++CGREG: x,2  -- Not registered, but MT is currently trying to attach or searching an operator to
+register to.
+
+
+恢复出厂设置
+/mh_fix_net/mbopt "AT&F\r\n"
+
+查询信号，没有手机卡也能查。
+/mh_fix_net/mbopt "AT+CSQ\r\n"
+
+查询模块版本 --- FAE可能用到
+echo -e "ATI\r\n" > /dev/ttyUSB2
+echo -e "AT+CVERSION\r\n" > /dev/ttyUSB2
+
+-------------------------------------低频命令-------------------------------------
+查询band配置：
+echo -e "AT+QCFG=\"BAND\"\r\n" > /dev/ttyUSB2
+	+QCFG: "band",<bandval>,<ltebandval>,<tdsbandval>
+		value that specifies the GSM and WCDMA frequency bands. 
+			value that specifies the LTE frequency band.
+				value that specifies the TD-SCDMA frequency band.
+
+列出QMBNCFG --- 不知何用，FAE可能用到。
+echo -e  "AT+QMBNCFG=\"list\"\r\n"> /dev/ttyUSB2
+
+
